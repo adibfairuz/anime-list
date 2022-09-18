@@ -1,7 +1,7 @@
 import { gql } from "graphql-request"
 
 export const getAnimeTrends = gql`
-    query ListAnimeTrends($page: Int, $perPage: Int) {
+    query AnimeTrends($page: Int, $perPage: Int) {
         Page(page: $page, perPage: $perPage){
             pageInfo {
                 total

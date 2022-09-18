@@ -4667,17 +4667,61 @@ export type YearStats = {
   year?: Maybe<Scalars['Int']>;
 };
 
-export type ListAnimeTrendsQueryVariables = Exact<{
+export type AnimeDetailsQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type AnimeDetailsQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', id: number, status?: MediaStatus | null, genres?: Array<string | null> | null, type?: MediaType | null, episodes?: number | null, source?: MediaSource | null, description?: string | null, bannerImage?: string | null, meanScore?: number | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, endDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null };
+
+export type AnimeTrendsQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']>;
   perPage?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type ListAnimeTrendsQuery = { __typename?: 'Query', Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', total?: number | null, perPage?: number | null, currentPage?: number | null, lastPage?: number | null, hasNextPage?: boolean | null } | null, mediaTrends?: Array<{ __typename?: 'MediaTrend', media?: { __typename?: 'Media', id: number, genres?: Array<string | null> | null, description?: string | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null } | null } | null> | null } | null };
+export type AnimeTrendsQuery = { __typename?: 'Query', Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', total?: number | null, perPage?: number | null, currentPage?: number | null, lastPage?: number | null, hasNextPage?: boolean | null } | null, mediaTrends?: Array<{ __typename?: 'MediaTrend', media?: { __typename?: 'Media', id: number, genres?: Array<string | null> | null, description?: string | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null } | null } | null> | null } | null };
 
 
-export const ListAnimeTrendsDocument = gql`
-    query ListAnimeTrends($page: Int, $perPage: Int) {
+export const AnimeDetailsDocument = gql`
+    query AnimeDetails($id: Int) {
+  Media(id: $id) {
+    id
+    title {
+      romaji
+      english
+      native
+      userPreferred
+    }
+    status
+    genres
+    type
+    episodes
+    source
+    description
+    bannerImage
+    coverImage {
+      extraLarge
+      large
+      medium
+      color
+    }
+    startDate {
+      year
+      month
+      day
+    }
+    endDate {
+      year
+      month
+      day
+    }
+    meanScore
+  }
+}
+    `;
+export const AnimeTrendsDocument = gql`
+    query AnimeTrends($page: Int, $perPage: Int) {
   Page(page: $page, perPage: $perPage) {
     pageInfo {
       total
@@ -4716,8 +4760,11 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    ListAnimeTrends(variables?: ListAnimeTrendsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ListAnimeTrendsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<ListAnimeTrendsQuery>(ListAnimeTrendsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ListAnimeTrends', 'query');
+    AnimeDetails(variables?: AnimeDetailsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AnimeDetailsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AnimeDetailsQuery>(AnimeDetailsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'AnimeDetails', 'query');
+    },
+    AnimeTrends(variables?: AnimeTrendsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AnimeTrendsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AnimeTrendsQuery>(AnimeTrendsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'AnimeTrends', 'query');
     }
   };
 }

@@ -1,11 +1,13 @@
-import type { ListAnimeTrendsQuery } from 'generated/graphql';
+import type { AnimeTrendsQuery } from 'generated/graphql';
 import { getSdk } from 'generated/graphql';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { client } from '~/utils/graphqlClient';
 import useMounted from '~/hooks/useMounted';
+import Card from '~/components/Card';
+import { Link } from '@remix-run/react';
 
 interface Props {
-    data: ListAnimeTrendsQuery['Page']
+    data: AnimeTrendsQuery['Page']
 }
 
 const AnimeList: React.FC<Props> = (props) => {
@@ -26,7 +28,7 @@ const AnimeList: React.FC<Props> = (props) => {
         try {
             setIsLoading(true)
             const sdk = getSdk(client)
-            const res = await sdk.ListAnimeTrends({
+            const res = await sdk.AnimeTrends({
                 page,
                 perPage: 10
             })
@@ -64,19 +66,15 @@ const AnimeList: React.FC<Props> = (props) => {
             <div className="grid grid-cols-2 gap-3 p-3">
                 {
                     data?.mediaTrends?.map(item => (
-                        <div
+                        <Link
                             key={item?.media?.id}
-                            className="flex flex-col items-center mb-2"
+                            to={`/${item?.media?.id}`}
                         >
-                            <img
-                                className="object-cover h-60 w-full rounded-md"
-                                alt={item?.media?.title?.english || ''}
-                                src={item?.media?.coverImage?.large || 'https://via.placeholder.com/230x270?text=image%20not%20found'}
+                            <Card
+                                title={item?.media?.title?.english as string}
+                                imageUrl={item?.media?.coverImage?.large as string}
                             />
-                            <div className="text-center font-semibold">
-                                {item?.media?.title?.english}
-                            </div>
-                        </div>
+                        </Link>
                     ))
                 }
             </div>
